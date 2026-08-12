@@ -19,7 +19,7 @@ def run_backtest(price, starting_balance=100_000):
 
     price["Sys_Ret"] = np.where(
         price["Long"].shift(1) == True,
-        1 + price["Return"],
+        price["Return"],
         1
     )
 
