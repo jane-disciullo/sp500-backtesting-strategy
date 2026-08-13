@@ -7,10 +7,13 @@ def load_spy_data(
     interval="1d"
 ):
     """
-    Download historical SPY price data and calculate returns.
+    Download historical SPY price data and calculate return columns.
 
-    Returns:
-        pandas.DataFrame: SPY price data with return columns.
+    Returns
+    -------
+    pandas.DataFrame
+        SPY price data with daily returns, return multipliers,
+        and benchmark portfolio value.
     """
 
     price = yf.download(
@@ -22,12 +25,15 @@ def load_spy_data(
     )
 
     # Daily simple return
-    price["Return"] = price["Close"].pct_change()
+    price["Daily_Return"] = price["Close"].pct_change()
 
-    # Benchmark daily return
-    price["Daily_Return"] = price["Return"]
+    # Return multiplier used by the backtest
+    price["Return"] = price["Close"] / price["Close"].shift(1)
+    price.loc[price.index[0], "Return"] = 1
 
     # Benchmark portfolio value
-    price["Bench_Bal"] = 100_000 * (1 + price["Daily_Return"]).cumprod()
+    price["Bench_Bal"] = (
+        100_000 * (1 + price["Daily_Return"]).cumprod()
+    )
 
     return price
