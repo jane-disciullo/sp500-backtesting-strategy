@@ -43,13 +43,6 @@ def run_moving_average_experiment(
         end=end,
     )
 
-    # Calculate daily percentage returns
-    price["Daily_Return"] = price["Close"].pct_change()
-
-    # Calculate return multiplier used by the backtest
-    price["Return"] = price["Close"] / price["Close"].shift(1)
-    price.loc[price.index[0], "Return"] = 1
-
     # Generate moving-average signal
     price = generate_ma_signal(
         price,
