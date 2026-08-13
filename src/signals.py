@@ -40,3 +40,28 @@ def generate_momentum_signal(price, lookback=20):
     price["Long"] = price["Momentum"] > 0
 
     return price
+    
+def generate_mean_reversion_signal(price, lookback=20):
+    """
+    Generate a mean-reversion signal based on a moving average.
+
+    Parameters
+    ----------
+    price : pandas.DataFrame
+        Historical price data.
+    lookback : int, default=20
+        Moving-average window used to measure mean reversion.
+
+    Returns
+    -------
+    pandas.DataFrame
+        Price data with Mean and Long columns.
+    """
+
+    price = price.copy()
+
+    price["Mean"] = price["Close"].rolling(window=lookback).mean()
+
+    price["Long"] = price["Close"] < price["Mean"]
+
+    return price
