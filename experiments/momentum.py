@@ -66,9 +66,10 @@ def run_momentum_experiment(
     years = (price.index.max() - price.index.min()).days / 365.25
 
     cagr = calculate_cagr(
-        price,
-        years=years,
-    )
+    price,
+    years=years,
+    starting_balance=starting_balance,
+)
 
     drawdown = calculate_max_drawdown(price)
 
