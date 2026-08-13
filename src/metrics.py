@@ -39,24 +39,40 @@ def calculate_sharpe_ratio(price, risk_free_rate=0):
     }
 
 
-def calculate_cagr(price, years):
-    """Calculate CAGR for the benchmark and strategy."""
+def calculate_cagr(price, years, starting_balance=100_000):
+    """
+    Calculate CAGR for the benchmark and strategy.
+
+    Parameters
+    ----------
+    price : pandas.DataFrame
+        Price data containing benchmark and strategy balances.
+    years : float
+        Number of years in the backtest.
+    starting_balance : float, default=100000
+        Initial portfolio balance.
+
+    Returns
+    -------
+    dict
+        CAGR for the benchmark and strategy.
+    """
+
+    final_bench = price["Bench_Bal"].iloc[-1]
+    final_strategy = price["Sys_Bal"].iloc[-1]
 
     cagr_bench = (
-        (price["Bench_Bal"].iloc[-1] / price["Bench_Bal"].iloc[0])
-        ** (1 / years)
+        (final_bench / starting_balance) ** (1 / years)
     ) - 1
 
     cagr_strategy = (
-        (price["Sys_Bal"].iloc[-1] / price["Sys_Bal"].iloc[0])
-        ** (1 / years)
+        (final_strategy / starting_balance) ** (1 / years)
     ) - 1
 
     return {
         "cagr_bench": cagr_bench,
         "cagr_strategy": cagr_strategy,
     }
-
 
 def calculate_max_drawdown(price):
     """Calculate maximum drawdown for the benchmark and strategy."""
