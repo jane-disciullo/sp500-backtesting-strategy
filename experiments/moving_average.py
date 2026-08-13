@@ -68,6 +68,7 @@ def run_moving_average_experiment(
     cagr = calculate_cagr(
         price,
         years=years,
+        starting_balance=starting_balance,
     )
 
     drawdown = calculate_max_drawdown(price)
